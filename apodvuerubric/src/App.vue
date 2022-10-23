@@ -23,13 +23,13 @@ export default {
   data() {
     return {
       APIkey: `7msuN5krwsbku6ppzLaaqfBjcEf2ojJUX9lzuwVW`,
-      imgUrl: ``,
-      imgDescription: ``,
-      imgAuthor: ``,
-      imgTitle: ``,
-      imgDate: ``,
-      imgUrlHD: ``,
-      mediaType: ``,
+      imgUrl: undefined,
+      imgDescription: undefined,
+      imgAuthor: undefined,
+      imgTitle: undefined,
+      imgDate: undefined,
+      imgUrlHD: undefined,
+      mediaType: undefined,
     };
   },
   created() {
@@ -143,10 +143,57 @@ export default {
           this.imgTitle = data.title;
           this.imgDate = data.date;
           this.mediaType = data.media_type;
+
+          const mainBtn = document.getElementById("mainBtn");
+          const descBtn = document.getElementById("descBtn");
+          mainBtn.classList.remove("closed");
+          descBtn.classList.add("closed");
+          mainBtn.classList.add("open");
+          descBtn.classList.remove("open");
+
+          const main = document.getElementById("main");
+          main.innerHTML = ``;
+
+          const title = document.createElement("h1");
+          title.id = "title";
+          title.innerText = this.imgTitle;
+          main.appendChild(title);
+          const date = document.createElement("p");
+          date.id = "date";
+          date.innerText = this.imgDate;
+          main.appendChild(date);
+
+          if (this.mediaType == "image") {
+            const img = document.createElement("img");
+            img.id = "mainImg";
+            img.src = this.imgUrl;
+            main.appendChild(img);
+          }
+
+          if (this.mediaType == "video") {
+            const video = document.createElement("iframe ");
+            video.id = "mainImg";
+            video.src = this.imgUrl;
+            main.appendChild(video);
+          }
+
+          const author = document.createElement("p");
+          author.id = "author";
+          author.innerText = this.imgAuthor;
+          main.appendChild(author);
+
+          const curDate = new Date();
+          const isoDate = curDate.toISOString();
+          const isoDateArr = isoDate.split("T");
+          const isoDateNow = isoDateArr[0];
+          console.log(isoDateNow);
+          console.log(this.imgDate);
+          if (this.imgDate == isoDateNow) {
+            document.getElementById("rightArr").classList.add("hidden");
+          } else {
+            document.getElementById("rightArr").classList.remove("hidden");
+          }
         });
-      if (this.date != new Date()) {
-        document.getElementById("rightArr").classList.remove("hidden");
-      }
     },
     returnImg() {
       let newDate = new Date(this.imgDate);
@@ -174,10 +221,59 @@ export default {
           this.imgTitle = data.title;
           this.imgDate = data.date;
           this.mediaType = data.media_type;
+
+          const mainBtn = document.getElementById("mainBtn");
+          const descBtn = document.getElementById("descBtn");
+          mainBtn.classList.remove("closed");
+          descBtn.classList.add("closed");
+          mainBtn.classList.add("open");
+          descBtn.classList.remove("open");
+
+          const main = document.getElementById("main");
+          main.innerHTML = ``;
+
+          const title = document.createElement("h1");
+          title.id = "title";
+          title.innerText = this.imgTitle;
+          main.appendChild(title);
+          const date = document.createElement("p");
+          date.id = "date";
+          date.innerText = this.imgDate;
+          main.appendChild(date);
+
+          if (this.mediaType == "image") {
+            const img = document.createElement("img");
+            img.id = "mainImg";
+            img.src = this.imgUrl;
+            main.appendChild(img);
+          }
+
+          if (this.mediaType == "video") {
+            const video = document.createElement("iframe ");
+            video.id = "mainImg";
+            video.src = this.imgUrl;
+            main.appendChild(video);
+          }
+
+          const author = document.createElement("p");
+          author.id = "author";
+          author.innerText = this.imgAuthor;
+          main.appendChild(author);
+          if (this.date == "1995-06-15") {
+            document.getElementById("leftArr").classList.add("hidden");
+          }
+
+          const curDate = new Date();
+          const isoDate = curDate.toISOString();
+          const isoDateArr = isoDate.split("T");
+          const isoDateNow = isoDateArr[0];
+          console.log(isoDateNow);
+          if (this.imgDate == isoDateNow) {
+            document.getElementById("rightArr").classList.add("hidden");
+          } else {
+            document.getElementById("rightArr").classList.remove("hidden");
+          }
         });
-      if (this.date == "1995-06-15") {
-        document.getElementById("leftArr").classList.add("hidden");
-      }
     },
   },
 };
@@ -190,14 +286,26 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
+
+:root {
+  --darkGreen: #006d77;
+  --lightGreen: #85c5be;
+  --white: #edf6f9;
+  --blue: #eaf8fd;
+  --brown: #e29578;
+}
 .hidden {
   display: none;
 }
 body {
-  background-color: #d4c1ec;
-  color: #000000;
+  background-color: var(--lightGreen);
+  color: var(--darkGreen);
   margin: 0;
   padding: 0;
+}
+
+img {
+  object-fit: contain;
 }
 
 .btn {
@@ -216,23 +324,26 @@ h1 {
 }
 
 main {
-  background-color: #000000;
-  color: #d4c1ec;
+  background-color: var(--blue);
+  color: var(--darkGreen);
   margin: 0;
-  padding: 50px;
+  padding: 50px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 0 200px;
+  border-radius: 5px;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
 }
 
 #mainImg {
-  height: auto;
-  width: 70vh;
+  max-height: 80vh;
+  max-width: 70vw;
 }
 
 #descImg {
-  height: auto;
-  width: 35vw;
+  max-width: 35vw;
+  max-height: 50vh;
   margin: 20px;
 }
 
@@ -245,27 +356,42 @@ main {
 }
 
 .open {
-  background-color: #000000;
-  color: #d4c1ec;
+  background-color: var(--blue);
+  color: var(--darkGreen);
 }
 .closed {
-  background-color: #d4c1ec;
-  color: #000000;
-  border-top: #000000 solid 4px;
-  border-left: #000000 solid 4px;
-  border-right: #000000 solid 4px;
+  background-color: var(--darkGreen);
+  color: var(--white);
+  border: var(--darkGreen) solid 4px;
   box-sizing: border-box;
   padding: 6px;
 }
 
 #btnSect {
-  margin: 0 20px 0 50px;
+  margin: 0 20px 0 250px;
 }
 #rightArr {
-  margin: 20px 20px 20px 90vw;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 80px;
+  margin: 0;
+  background-color: var(--darkGreen);
+  color: var(--white);
 }
 #leftArr {
-  margin: 20px;
- 
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  width: 80px;
+  margin: 0;
+  background-color: var(--darkGreen);
+  color: var(--white);
+}
+
+#leftArr:hover,
+#rightArr:hover {
+  background-color: var(--white);
+  color: var(--darkGreen);
 }
 </style>
